@@ -6,11 +6,12 @@ import json
 import pandas as pd
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+import os
 
 app = Flask(__name__)
 
 app.config['MONGODB_SETTINGS'] = {
-	'host': 'mongodb://localhost/quotes'
+	'host': os.environ.get("MONGO_URL",None)
 }
 initialize_db(app)
 
