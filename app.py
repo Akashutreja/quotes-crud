@@ -7,17 +7,15 @@ import pandas as pd
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import os
-
 app = Flask(__name__)
 
 app.config['MONGODB_SETTINGS'] = {
-	'host': os.environ.get("MONGO_URL",None)
+	'host': 'mongodb://localhost/quotes'
 }
 initialize_db(app)
 
 @app.route('/')
 def hello():
-	# Quote(quote="hey what's up?", author="12",rating=2,addedBy="12").save()
 	return {'hello': 'world'}
 
 @app.route('/quotes')
@@ -81,7 +79,6 @@ def related_quote():
 		return {"message": "failed", "reason": str(e)}, 400
 
 def get_match(data, rated):
-	# print(data, rated)
 	matched_ratio = process.extract(data,rated, scorer=fuzz.token_sort_ratio)
 	if matched_ratio:
 		out = list(filter(lambda x: x[1]>50,matched_ratio))
